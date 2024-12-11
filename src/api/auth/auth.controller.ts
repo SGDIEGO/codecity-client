@@ -7,7 +7,7 @@ export const signinController = async (body: UserInputCreate) => {
         const response = await instance.post('/auth/signin', body)
         const data = await response.data
         return await fetchUserDataMiddleware(data)
-    } catch (error) {
+    } catch (error: any) {
         throw error.response.data
     }
 }
@@ -17,7 +17,7 @@ export const signupController = async (body: UserInputCreate) => {
         const response = await instance.post('/auth/signup', body)
         const data = await response.data
         return await fetchUserDataMiddleware(data)
-    } catch (error) {
+    } catch (error: any) {
         throw error.response.data
     }
 }
@@ -27,7 +27,7 @@ export const oauthGoogleController = async () => {
         const response = await instance.get('/auth/google')
         const data = await response.data
         return await fetchUserDataMiddleware(data)
-    } catch (error) {
+    } catch (error: any) {
         throw error.response.data
     }
 }

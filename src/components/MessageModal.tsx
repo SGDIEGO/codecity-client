@@ -1,4 +1,3 @@
-import { UserDto } from "@/api/user/dto/user.dto";
 import { useSocketContext } from "@/context/Socket";
 import { SocketEvents } from "@/context/Socket/events";
 import { useEffect, useState } from "react";
@@ -23,7 +22,7 @@ export interface GetMessageDto {
 const MessageModal = ({ }: MessageModalProps) => {
     const { socket } = useSocketContext()
 
-    const [searchParams, setSearchParams] = useSearchParams()
+    const [searchParams] = useSearchParams()
     const to = searchParams.get("to")
 
     const [message, setMessage] = useState("");

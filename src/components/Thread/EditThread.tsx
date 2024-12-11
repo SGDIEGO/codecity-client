@@ -1,12 +1,11 @@
 // src/components/CreateThreadModal.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { InputForm } from '../Input';
 import { patchThread } from '@/api/thread/thread.api';
 import { toast } from 'react-toastify';
-import { useParams } from 'react-router-dom';
 
 const formSchema = z.object({
     id: z.string(),

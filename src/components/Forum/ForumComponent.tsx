@@ -16,8 +16,7 @@ interface ForumComponentProperties {
 export const Forum = ({ data }: ForumComponentProperties) => {
     const { user } = useAuthContext();
     const navigate = useNavigate();
-    const [isEditing, setIsEditing] = useState(false);
-    const [newName, setNewName] = useState(data.name);
+    const [newName] = useState(data.name);
     const deleteForum = useDeleteForumMutation();
     const updateForum = useUpdateForumMutation();
 
@@ -34,21 +33,21 @@ export const Forum = ({ data }: ForumComponentProperties) => {
         }
     };
 
-    const handleEdit = async () => {
-        try {
-            await updateForum.mutateAsync({
-                forum_id: data.id,
-                body: {
-                    name: newName,
-                }
-            });
-            toast.success('Forum updated successfully');
-            setIsEditing(false);
-        } catch (error: any) {
-            console.log(error)
-            toast.error('Error updating forum');
-        }
-    };
+    /*     const handleEdit = async () => {
+            try {
+                await updateForum.mutateAsync({
+                    forum_id: data.id,
+                    body: {
+                        name: newName,
+                    }
+                });
+                toast.success('Forum updated successfully');
+                setIsEditing(false);
+            } catch (error: any) {
+                console.log(error)
+                toast.error('Error updating forum');
+            }
+        }; */
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
@@ -74,52 +73,51 @@ export const Forum = ({ data }: ForumComponentProperties) => {
     return (
         <div className="relative flex flex-col items-center bg-slate-100 dark:bg-slate-800 rounded-lg shadow-md sm:flex-row sm:items-start group">
             <div className="w-full sm:w-1/3 relative">
-            <img src={data.image_url} alt="" className="w-full h-48 object-cover rounded-t-lg sm:rounded-l-lg sm:rounded-t-none" />
-            {
-                (data.creator.id == user?.id) &&
-                <>
-                    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full cursor-pointer">
-                    <Upload
-                        onClick={() => document.getElementById('fileInput')?.click()}
-                        className="text-white w-8 h-8"
-                    />
-                    </div>
-                    <input
-                    type="file"
-                    id="fileInput"
-                    className="hidden"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    />
-                </>
-            }
-            </div>
-            <div className='p-4 w-full sm:w-2/3 sm:flex sm:justify-between'>
-            <div>
-                <div className="flex-1 text-center sm:text-left">
-                <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100">{data.name}</h3>
-                <div className="text-slate-600 dark:text-slate-400">
-                    <span className="mr-2">{data.creator?.name}</span>
-                    <span>{data.numberOfPosts} threads</span>
-                </div>
-                </div>
-                <div className="mt-4 text-center sm:text-left flex gap-2">
-                <Button name={'View'} onClickHandler={handleClick} />
+                <img src={data.image_url} alt="" className="w-full h-48 object-cover rounded-t-lg sm:rounded-l-lg sm:rounded-t-none" />
                 {
-                    user && ((user?.user_role.name === USER_ROLES.Staff) || (data.creator.id == user.id)) &&
+                    (data.creator.id == user?.id) &&
                     <>
-                        <Button name={'Edit'} onClickHandler={() => setIsEditing(true)} variant='secondary' />
-                        <Button name={'Delete'} onClickHandler={handleDelete} variant='danger' />
+                        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full cursor-pointer">
+                            <Upload
+                                onClick={() => document.getElementById('fileInput')?.click()}
+                                className="text-white w-8 h-8"
+                            />
+                        </div>
+                        <input
+                            type="file"
+                            id="fileInput"
+                            className="hidden"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                        />
                     </>
                 }
-                </div>
             </div>
-            {data.lastPost && (
-                <div className="mt-4 text-slate-600 dark:text-slate-400">
-                <div>Last post by {data.lastPost.user.name}</div>
-                <div>{formatDate(data.lastPost.creation_date)}</div>
+            <div className='p-4 w-full sm:w-2/3 sm:flex sm:justify-between'>
+                <div>
+                    <div className="flex-1 text-center sm:text-left">
+                        <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100">{data.name}</h3>
+                        <div className="text-slate-600 dark:text-slate-400">
+                            <span className="mr-2">{data.creator?.name}</span>
+                            <span>{data.numberOfPosts} threads</span>
+                        </div>
+                    </div>
+                    <div className="mt-4 text-center sm:text-left flex gap-2">
+                        <Button name={'View'} onClickHandler={handleClick} />
+                        {
+                            user && ((user?.user_role.name === USER_ROLES.Staff) || (data.creator.id == user.id)) &&
+                            <>
+                                <Button name={'Delete'} onClickHandler={handleDelete} variant='danger' />
+                            </>
+                        }
+                    </div>
                 </div>
-            )}
+                {data.lastPost && (
+                    <div className="mt-4 text-slate-600 dark:text-slate-400">
+                        <div>Last post by {data.lastPost.user.name}</div>
+                        <div>{formatDate(data.lastPost.creation_date)}</div>
+                    </div>
+                )}
             </div>
         </div>
     );

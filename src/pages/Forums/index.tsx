@@ -18,8 +18,7 @@ export default function Forums() {
         try {
             await createForum.mutateAsync({
                 name: values.name,
-                creation_date: new Date(),
-                creator_id: user?.id as string
+                description: '',
             });
             toast.success('Forum created!');
         } catch (error: any) {

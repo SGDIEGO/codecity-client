@@ -67,7 +67,7 @@ const MessageComponent = ({ message, children }: MessageComponentProps) => {
 
     const handleDelete = async () => {
         try {
-            const res = await removeMessage.mutateAsync(message.id!);
+            await removeMessage.mutateAsync(message.id!);
             toast.success('Message deleted');
         } catch (error: any) {
             console.log(error);
